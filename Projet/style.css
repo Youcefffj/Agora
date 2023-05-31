@@ -31,7 +31,7 @@ nav {
     border-radius: 30px;
     word-spacing: 5px;
     text-decoration: none;
-    position: relative;
+    position: sticky;
     top:0;
     z-index: 1;
     
