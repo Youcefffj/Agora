@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Agora Francia - Catégories de produits</title>
+    <title>Agora Francia - Neufs</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="Website icon" type="png" href="images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,33 +27,24 @@
         </nav>
 
         <div class="flash">
-            <h2>Catégories de produits</h2>
+            <h2>Produits neufs</h2>
         </div>
 
         <main>
             <div class="container">
                 <div class="card">
-                    <a href="encheres.php">
-                        <img src="images/encheres.jpg" class="image1">
-                        <br>
-                        <p>Enchères</p>
-                    </a>
+                    <img src="images/produit_neuf1.jpg" class="image1">
+                    <p>Produit neuf 1</p>
                 </div>
 
                 <div class="card">
-                    <a href="neufs.php">
-                        <img src="images/neufs.jpg" class="image1">
-                        <br>
-                        <p>Neufs</p>
-                    </a>
+                    <img src="images/produit_neuf2.jpg" class="image1">
+                    <p>Produit neuf 2</p>
                 </div>
 
                 <div class="card">
-                    <a href="reconditionnes.php">
-                        <img src="images/reconditionnes.jpg" class="image1">
-                        <br>
-                        <p>Reconditionnés</p>
-                    </a>
+                    <img src="images/produit_neuf3.jpg" class="image1">
+                    <p>Produit neuf 3</p>
                 </div>
             </div>
         </main>

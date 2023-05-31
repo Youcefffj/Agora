@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Agora Francia - Catégories de produits</title>
+    <title>Agora Francia - Notifications</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="Website icon" type="png" href="images/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +11,6 @@
 </head>
 <body>
     <div class="wrapper">
-        <header>
-            <h1>Agora Francia</h1>
-            <img src="images/logo.png" alt="logo" class="logo">
-        </header>
-
         <nav>
             <ul class="list">
                 <li><a style="color:black;text-decoration:none" href="index.php">Accueil</a></li>
@@ -25,42 +20,26 @@
                 <li><a style="color:black;text-decoration:none" href="login.php">Votre Compte</a></li>
             </ul>
         </nav>
-
-        <div class="flash">
-            <h2>Catégories de produits</h2>
-        </div>
+        <header>
+            <h1>Notifications</h1>
+        </header>
 
         <main>
-            <div class="container">
-                <div class="card">
-                    <a href="encheres.php">
-                        <img src="images/encheres.jpg" class="image1">
-                        <br>
-                        <p>Enchères</p>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="neufs.php">
-                        <img src="images/neufs.jpg" class="image1">
-                        <br>
-                        <p>Neufs</p>
-                    </a>
-                </div>
-
-                <div class="card">
-                    <a href="reconditionnes.php">
-                        <img src="images/reconditionnes.jpg" class="image1">
-                        <br>
-                        <p>Reconditionnés</p>
-                    </a>
+            <div class="parent">
+                <div class="form">
+                    <form action="send_notification.php" method="post">
+                        <input type="email" name="email" class="input" placeholder="Adresse e-mail :" required>
+                        <br><br>
+                        <input type="text" name="product" class="input" placeholder="Produit :" required>
+                        <br><br>
+                        <button type="submit" class="send">S'inscrire à la notification</button>
+                    </form>
                 </div>
             </div>
         </main>
-
         <footer>
-            <h><a href="AboutUs.php">À propos de nous</a> | Crédits | Ce que tu veux | Blablabla</h>
-        </footer>
+                <h><a href="AboutUs.php">About us </a>| Credit | ce que tu veux | blablabla</h>
+            </footer>
     </div>
 </body>
 </html>

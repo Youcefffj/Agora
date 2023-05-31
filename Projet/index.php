@@ -25,9 +25,9 @@
             <nav>
                 <ul class="list">
                     <li><a style="color:black;text-decoration:none" href="index.php">Accueil</a></li>
-                    <li><a style="color:black;text-decoration:none" href="#">Tout parcourir</a></li>
-                    <li><a style="color:black;text-decoration:none" href="#">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="#">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
+                    <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
+                    <li><a style="color:black;text-decoration:none" href="Panier.php">Panier</a></li>
                     <li ><a style="color:black;text-decoration:none" href="login.php">Votre Compte</a></li>
                 </ul>
             </nav>
