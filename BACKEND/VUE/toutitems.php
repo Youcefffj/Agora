@@ -1,40 +1,3 @@
-<style>
-    .card{
-    border-radius: 20px;
-    margin-left: 20px;
-    height: 200px;
-    background-color: #fff;
-    flex:1;
-    transition: .3s all ease;
-
-}
-
-.card:hover{
-    flex:2;
-    background-color: rgb(207,207,207);
-}
-
-.container{
-    display: flex;
-}
-
-
-.image1{
-    width: 100px;
-    height: 100px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-
-}
-
-p{
-
-    font-family: sans-serif;
-    text-align: center;
-}
-</style>
 <?php
 
 // //////////////////////////////////////////////////////// //
@@ -42,6 +5,9 @@ p{
 // //////////////////////////////////////////////////////// //
 
 include "../Connection.php";
+
+session_start();
+echo $_SESSION['user'] ;
 
 Connection::initConnection();
 
