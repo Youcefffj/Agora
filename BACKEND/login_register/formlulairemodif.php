@@ -4,11 +4,25 @@ session_start();
 
 include "../Controller.php";
 
+
 function formRegister() {
     ?>
-    <div class="main-box">
+    <div class="parent">
         <h1 class="main-title">Inscription</h1>
         <form method="post" class="form-connection">
+
+            <label class="radio-button">
+                <input value="acheteur" name="status" type="radio" required>
+                <span class="radio" ></span>
+                ACHETEUR
+            </label>
+
+            <label class="radio-button">
+                <input value="vendeur" name="status" type="radio" >
+                <span class="radio" ></span>
+                VENDEUR
+            </label>
+
             <div class="form-line">
                 <label class="big-2" for="pseudo">Pseudo</label>
                 <input class="input" type="text" name="pseudo" placeholder="Pseudo" required>
@@ -44,7 +58,39 @@ function formRegister() {
                 <input class="input" type="text" name="adresse" placeholder="adresse" required>
             </div>
 
-            <input class="blue-button" type="submit" name="register-form" value="S'inscrire">
+            <div class="form-line">
+                <label class="big-2" for="adresse">adresse2</label>
+                <input class="input" type="text" name="adresse2" placeholder="adresse" >
+            </div>
+
+            <div class="form-line">
+                <label class="big-2" for="ville">VILLE</label>
+                <input class="input" type="text" name="ville" placeholder="ville" required>
+            </div>
+
+            
+            <div class="form-line">
+                <label class="big-2" for="CP">CP</label>
+                <input class="input" type="number" name="CP" placeholder="CP" required>
+            </div>
+
+            <div class="form-line">
+                <label class="big-2" for="pays">pays</label>
+                <input class="input" type="text" name="pays" placeholder="pays" required>
+            </div>
+
+            <div class="form-line">
+                <label class="big-2" for="photo">Photo de profil</label>
+                <input class="input" type="file" name="photo" accept="image/*" required>
+            </div>
+
+            <div class="form-line">
+                <input class="input" type="checkbox" name="checkbox" required>j'ai lu et j'accepte les conditions generales d'utilisation
+            </div>
+
+            <input type="submit" name="register-form" value="S'inscrire" >
+
+
         </form>
     
         <p class="big-1">
@@ -57,25 +103,41 @@ function formRegister() {
         // Vérifier si le formulaire a été soumis
 
         // Récupérer les valeurs soumises
-        $status = 'acheteur';
+
+        $status = $_POST['status'];
         $pseudo = $_POST['pseudo'];
         $email = $_POST['email'];
         $password = $_POST['password'];
         $passwordConfirm =$_POST['password-confirm']; 
         $nom  =$_POST['firstname']; 
         $prenom  =$_POST['surname']; 
-        $adresse = 4;
-        $photo= NULL;
+        $photo  =$_POST['photo'];
         $image_fond_pref= NULL;
         $clause_acceptee= 1;
-        $id_moy_paiement=2;
+
+        //informations de livraison
+        $adresse  =$_POST['adresse'];
+        $adresse2  =$_POST['adresse2'];
+        $ville  =$_POST['ville'];
+        $CP  =$_POST['CP'];
+        $pays  =$_POST['pays'];
+        $id_carte = NULL;
 
         // Vérifier si les mots de passe correspondent
         if ($password === $passwordConfirm) {
-           
+            
+            $prepare = Connection::$db->prepare("INSERT INTO adresse(adresse_ligne1 ,adresse_ligne2, ville, code_postal, pays) VALUES (?, ?, ?, ?, ?)");
+            $prepare->execute(array($adresse ,$adresse2, $ville, $CP, $pays));
+            
+            $adresse_id = Connection::$db->lastInsertId();
+
+
+            
+
+
             // Préparer et exécuter la requête d'insertion
             $prepare = Connection::$db->prepare("INSERT INTO user(`status` ,pseudo, email, mdp, nom, prenom, id_adr, photo, image_fond_pref, clause_acceptee, id_moy_paiement)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $prepare->execute(array($status ,$pseudo, $email, $password, $nom, $prenom, $adresse, $photo, $image_fond_pref, $clause_acceptee, $id_moy_paiement));
+            $prepare->execute(array($status ,$pseudo, $email, $password, $nom, $prenom, $adresse_id, $photo, $image_fond_pref, $clause_acceptee, $id_carte));
             
             //cession utilisateur
             $lastInsertId = Connection::$db->lastInsertId();
@@ -83,12 +145,19 @@ function formRegister() {
             // Définir la variable de session pour l'utilisateur
             $_SESSION['user'] = $lastInsertId;
 
+            header("Location: infopaiement.php");
+            exit(); // Assurez-vous de terminer le script ici
+
         } else {
             echo 'Les mots de passe ne correspondent pas.';
         }
+
+
     }
     
 }
+
+
 
 ?>
 
@@ -157,8 +226,8 @@ function formConnection() {
 <html>
     <body>
         <?php
-            //formRegister();
-            formConnection();
+            formRegister();
+            //formConnection();
         ?>
     </body>
 </html>
