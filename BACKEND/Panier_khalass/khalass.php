@@ -52,6 +52,21 @@ function paiement() {
     var_dump ("Date d'expiration : " . $DateExp);
     var_dump ("Cryptogramme : " . $Crypto);
 
+
+        // Préparer et exécuter la requête de vérification
+        $prepare = Connection::$db->prepare("SELECT * FROM moy_paiement WHERE num_carte = ? AND type_carte = ? AND nom_carte = ? AND date_exp = ? AND securite = ?");
+        $prepare->execute(array($numCB, $paymode, $nomCarte, $DateExp, $Crypto));
+        
+        $result = $prepare->fetch();
+        
+        if ($result) {
+            // Les données saisies existent dans la table moy_paiement
+            echo "Les données sont valides.";
+        } else {
+            // Les données saisies ne correspondent pas à celles de la table moy_paiement
+            echo "Les données sont invalides.";
+        }
+
     
   }
 }
