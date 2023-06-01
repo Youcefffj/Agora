@@ -58,10 +58,8 @@ function SellForm() {
 
         
         // Définir l'emplacement de destination pour l'image
-        $destination = '/wamp64/www/Agora 2/image/image'.rand(0,10000000).'.jpg';
-        //$destination = '/wamp64/www/Agora 2/image/imagetest.jpg';
-        
-        //
+        $destination = '../image/image'.rand(0,10000000).'.jpg';
+
 
         // Déplacer le fichier image vers l'emplacement de destination
         move_uploaded_file($photoObj, $destination);
