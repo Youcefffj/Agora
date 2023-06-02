@@ -155,7 +155,7 @@ a{
 .form{
     text-align: center;
     background-color: #dbcebd;
-    border-radius: 5%;
+    border-radius: 20px;
     padding: 20px;
     max-width: 500px;
     justify-content: center;
@@ -543,4 +543,29 @@ a{
 
 .slide.active {
     opacity: 1;
+}
+
+.containerProfil{
+    display: flex;
+    
+}
+.profil{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+.infoProfil{
+    background-color: #fefefe88;
+    border-radius: 20px;
+    margin-left: 20px;
+    margin-top : 10px;
+    font-family: sans-serif;
+    font-size: 30px;
+    padding: 10px;
+    margin:10px;
+    
+}
+    
+    
+    
 }

@@ -39,7 +39,7 @@ include "../Controller.php";
             $passwordConfirm =$_POST['password-confirm']; 
             $nom  =$_POST['firstname']; 
             $prenom  =$_POST['surname']; 
-            $photo  =$_POST['photo'];
+            $photo  =$_FILES['photo']['tnp_name'];
             $image_fond_pref= NULL;
             $clause_acceptee= 1;
 
@@ -50,6 +50,9 @@ include "../Controller.php";
             $CP  =$_POST['CP'];
             $pays  =$_POST['pays'];
             $id_carte = NULL;
+            
+            $destinationPP='images'.rand(0,10000000).'.jpg';
+            move_uploaded_file($photo,$destinationPP);
 
             // Vérifier si les mots de passe correspondent
             if ($password === $passwordConfirm) {
@@ -65,7 +68,7 @@ include "../Controller.php";
 
                 // Préparer et exécuter la requête d'insertion
                 $prepare = Connection::$db->prepare("INSERT INTO user(`status` ,pseudo, email, mdp, nom, prenom, id_adr, photo, image_fond_pref, clause_acceptee, id_moy_paiement)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $prepare->execute(array($status ,$pseudo, $email, $password, $nom, $prenom, $adresse_id, $photo, $image_fond_pref, $clause_acceptee, $id_carte));
+                $prepare->execute(array($status ,$pseudo, $email, $password, $nom, $prenom, $adresse_id, $destinationPP, $image_fond_pref, $clause_acceptee, $id_carte));
 
                 //cession utilisateur
                 $lastInsertId = Connection::$db->lastInsertId();
@@ -85,17 +88,6 @@ include "../Controller.php";
     }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
 
 
     <body>
