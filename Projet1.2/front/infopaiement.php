@@ -1,5 +1,9 @@
 <?php
 
+//////////////////////////////////////////////
+///**********NE PAS MODIFIER***************///
+//////////////////////////////////////////////
+
 session_start();
 
 include "../Controller.php";
@@ -89,7 +93,7 @@ include "../Controller.php";
 
         </div>
         
-        
+        <?php formCarte(); ?>
     </body>
 </html>
 
@@ -117,10 +121,9 @@ function formCarte() {
 
 ?>
 <script>
-    <script>
         function showAlert() {
-        alert("Vos informations ont bien été enregistrées");
-    }
+            alert("Vos informations ont bien été enregistrées");
+        }
 </script>
 
 <?php

@@ -1,5 +1,10 @@
 <?php
 
+//////////////////////////////////////////////
+///**********NE PAS MODIFIER***************///
+//////////////////////////////////////////////
+
+
 session_start();
 include "../Controller.php";
 
@@ -23,24 +28,26 @@ include "../Controller.php";
             $nomObj = $_POST['objName'];
             $descriptionObj = $_POST['description'];
             $prixObj = $_POST['prix'];
-            $enchereObj = $_POST['enchereouuuu'];
+            // $enchereObj = $_POST['enchereouuuu'];
             $photoObj = $_FILES['photo']['tmp_name'];
             $videoObj = !empty($_FILES['video']['tmp_name']) ? $_FILES['video']['tmp_name'] : NULL; 
             $categObj = $_POST['categ'];
 
 
             // DONNER NOM UNIQUE
-            $destination = '../image/image'.rand(0,10000000).'.jpg';
-            $videoDestination = '../video/video'.rand(0,10000000).'.mp4';
+            $destination = 'images/image'.rand(0,10000000).'.jpg';
+
 
             // ->DOSSIER ENREGISTREMENT
             move_uploaded_file($photoObj, $destination);
+            $videoDestination = NULL;
             if (!empty($videoObj)) { //Valeure initiale = NULL
+                $videoDestination = 'videos/video'.rand(0,10000000).'.mp4';
                 move_uploaded_file($videoObj, $videoDestination);
             }
 
-            $prepare = Connection::$db->prepare("INSERT INTO item(nom ,photos, descriptions, video, prix, id_categorie, maniere, id_vendeur)VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $prepare->execute(array($nomObj ,$destination, $descriptionObj, $videoObj,$prixObj, $categObj, $enchereObj, $_SESSION['user']));   
+            $prepare = Connection::$db->prepare("INSERT INTO item(nom ,photos, descriptions, video, prix, id_categorie)VALUES (?, ?, ?, ?, ?, ?)");
+            $prepare->execute(array($nomObj ,$destination, $descriptionObj, $videoDestination,$prixObj, $categObj));   
 
         }
 
@@ -90,10 +97,10 @@ include "../Controller.php";
                         <p>Catégorie :</p>
 
 
-                        <select name="cat" class="input">
-                            <option value="commun">commun</option>
-                            <option value="rare">rare</option>
-                            <option value="hdg">haut de gamme</option>
+                        <select name="categ" class="input">
+                            <option value="1">commun</option>
+                            <option value="2">rare</option>
+                            <option value="3">haut de gamme</option>
 
                         </select>
                         <br><br>

@@ -1,5 +1,9 @@
 <?php
 
+//////////////////////////////////////////////
+///**********NE PAS MODIFIER***************///
+//////////////////////////////////////////////
+
 session_start();
 
 include "../Controller.php";
@@ -39,7 +43,7 @@ include "../Controller.php";
             $passwordConfirm =$_POST['password-confirm']; 
             $nom  =$_POST['firstname']; 
             $prenom  =$_POST['surname']; 
-            $photo  =$_FILES['photo']['tnp_name'];
+            $photo  =$_FILES['photo']['tmp_name'];
             $image_fond_pref= NULL;
             $clause_acceptee= 1;
 
@@ -51,7 +55,7 @@ include "../Controller.php";
             $pays  =$_POST['pays'];
             $id_carte = NULL;
             
-            $destinationPP='images'.rand(0,10000000).'.jpg';
+            $destinationPP='PP/images'.rand(0,10000000).'.jpg';
             move_uploaded_file($photo,$destinationPP);
 
             // Vérifier si les mots de passe correspondent
@@ -76,7 +80,7 @@ include "../Controller.php";
                 // Définir la variable de session pour l'utilisateur
                 $_SESSION['user'] = $lastInsertId;
 
-                echo '<script>window.location.href = "infopaiement.php";</script>';
+                //echo '<script>window.location.href = "infopaiement.php";</script>';
 
             } else {
                 echo 'Les mots de passe ne correspondent pas.';
@@ -109,7 +113,7 @@ include "../Controller.php";
 
             <main>
                 <div class="parent">
-                    <form class="form" method="post">
+                    <form class="form" method="post" enctype="multipart/form-data">
 
 
                         <label class="radio-button">
