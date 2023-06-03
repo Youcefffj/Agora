@@ -2,6 +2,8 @@
 //////////////////////////////////////////////////////
 // CELUI QUI TOUCHE A CE FICHIER JE L'ENCLENCHE OK? //
 //////////////////////////////////////////////////////
+session_start();
+include "Basketfct.php";
 ?>
 
 <!DOCTYPE html>
@@ -170,6 +172,7 @@
                     $prepare = Connection::$db->prepare("SELECT * FROM item WHERE id_item = ?");
                     $prepare->execute(array($id));
                     $result = $prepare->fetch();
+
                     // echo $result['prix'];
                     // echo $result['nom'];
                     ?>
@@ -187,19 +190,42 @@
                             <div class="col-lg-4 trucs">
                                 <div class="Tools">
                                     <p>Prix : <?= $result['prix']; ?> €</p>
-                                    <label style="font-size: 25px">Quantité :</label>
-                                    <input type="number" value="quantite" style="width:100px;text-align:center;height:50px" min="0">
                                     <br>
-                                    <button class="send"> Add to Card </button>
-                                    <button class="send"> Négocier </button>
-                                    <button class="send"> Enchère </button>
-                                    <br>
+                                    <div class="tab">
+                                        <button class="send" onclick="openTab(event, 'acheter')"> Acheter </button>
+                                        <button class="send" onclick="openTab(event, 'negocier')"> Négocier </button>
+                                        <button class="send" onclick="openTab(event, 'encherir')"> Enchérir </button>
+                                        <br>
+                                    </div>
+                                    <div id="acheter" class="tabcontent" style="display: none">
+                                        <p>Ajouter au panier</p>
+                                        <form name="form" method="post">
+                                            <label style="font-size: 25px">Quantité :</label>
 
+                                            <input type="number" id="inputId" oninput="desactiverBouton()" name="quantite" value="0" style="width:100px;text-align:center;height:50px" min="0">
+                                            <input type="submit" id="boutonId" class="send" value="valider">
+                                        </form>
+                                    </div>
+
+                                    <div id="negocier" class="tabcontent" style="display: none">
+                                        <form name="form" method="post">
+                                            <p>Proposer un nouveau prix :</p>
+                                            <input type="number" name="new_price" style="width:100px;text-align:center;height:50px" min="1">
+                                            <input type="submit" class="send" value="valider">
+                                        </form>
+                                    </div>
+
+                                    <div id="encherir" class="tabcontent" style="display: none">
+                                        <form name="form" method="post">
+                                            <p>Enchérir : </p>
+                                            <input type="number" name="auction" value=<?= $result['prix'] + 1; ?> style="width:100px;text-align:center;height:50px" min=<?= $result['prix'] + 1; ?>>
+                                            <input type="submit" class="send" value="valider">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </header>
-
 
 
                     <br>
@@ -228,3 +254,77 @@
 </body>
 
 </html>
+
+
+<script>
+    function openTab(evt, actionType) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("send");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(actionType).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<?php
+
+if (isset($_POST['auction'])) {
+    encherir();
+}
+
+if(isset($_POST["quantite"])){
+    $quantite = $_POST["quantite"];
+    addToBasket($id, $quantite);
+    echo "ISSET QUANTITE";
+}
+
+function encherir()
+{
+    $enchere = $_POST['auction'];
+    $user = $_SESSION["user"];
+    global $id;
+    global $result;
+
+    if ($enchere > $result['prix']) {
+        // CHERCHE LE MEILLEUR ENRICHISSEUR
+        $prepare = Connection::$db->prepare("SELECT MAX(prix) FROM offre WHERE id_item = ?");
+        $prepare->execute(array($id));
+        $resultMaxPrice = $prepare->fetch();
+        $resultMaxPrice = $resultMaxPrice[0];
+
+        // SI MEILLEUR ENRICHISSEUR
+        if ($enchere > $resultMaxPrice) {
+            $newPrice = $resultMaxPrice + 1;
+            echo "MEILLEUR ENRICHISSEUR";
+        } else {
+            $newPrice = $enchere + 1;
+            echo "PAS LE MEILLEUR ENRICHISSEUR";
+        }
+        // AJOUTE L'ENCHERE DANS LA BDD
+        $prepare = Connection::$db->prepare("INSERT INTO offre(id_item ,id_user, prix) VALUES (?, ?, ?)");
+        $prepare->execute(array($id, $user, $enchere));
+        // MODIFIE LE PRIX DE L'ITEM DANS LA BDD
+        $prepare = Connection::$db->prepare("UPDATE item SET prix = ? WHERE id_item = ?");
+        $prepare->execute(array($newPrice, $id));
+    }
+}
+
+?>
+<script>
+    function desactiverBouton() {
+        var inputValeur = document.getElementById("inputId").value; // Récupérer la valeur du champ de saisie
+        var bouton = document.getElementById("boutonId"); // Récupérer le bouton par son ID
+
+        if (parseInt(inputValeur) === 0) {
+            bouton.disabled = true; // Désactiver le bouton
+        } else {
+            bouton.disabled = false; // Activer le bouton
+        }
+    }
+</script>

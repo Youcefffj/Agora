@@ -39,12 +39,16 @@
 
                 echo'Vous êtes connecté en tant que ';
                 echo $prepare["pseudo"];
-
-            }
-            else{
+                
+                if ($prepare["status"]=="admin"){
+                    echo '<script>window.location.href = "InterfaceAdmin.php";</script>';
+                }else{
+                    echo '<script>window.location.href = "../index.php";</script>';
+                }
+                
+            }else{
                 echo'Identifiants invalides';
             }
-
         }
 
     }
@@ -85,7 +89,6 @@
                 </p>
                 <div class="parent">
                     <?php
-                    //formRegister();
                     formConnection();
                     ?>
                 </div>
@@ -93,9 +96,6 @@
             <footer>
                 <h><a href="AboutUs.php">About us </a>| Credit | ce que tu veux | blablabla</h>
             </footer>
-
-
-
         </div>
     </body>
 </html>

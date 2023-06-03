@@ -1,3 +1,8 @@
+<?php
+session_start();
+//echo $_SESSION["user"];
+?>
+
 <!DOCTYPE html>
 <html>
     <head>

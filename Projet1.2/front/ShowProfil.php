@@ -7,6 +7,7 @@
 session_start();
 include "../Connection.php";
 include "../Controller.php";
+include "deco.php";
 
 // echo $_SESSION['user'] ;
 $profil = $_SESSION['user'];
@@ -108,7 +109,7 @@ function ShowProfile()
                         <?= $showadr['adresse_ligne1'] ?>
                         <br>
                         adresse 2:
-                        <?= $showadr['adresse_ligne1'] ?>
+                        <?= $showadr['adresse_ligne2'] ?>
                         <br>
                         Ville :
                         <?= $showadr['ville'] ?>
@@ -122,6 +123,11 @@ function ShowProfile()
                     </div>
                 </div>
             </div>
+            <div class="parent">
+                <form method="post">
+                    <input type="submit" class="send" name="deconnexionBtn" value="Déconnexion">
+                </form>
+            </div>
         </main>
         <footer>
             <h><a href="AboutUs.php">About us </a>| Credit | ce que tu veux | blablabla</h>
@@ -130,3 +136,10 @@ function ShowProfile()
 </body>
 
 </html>
+
+
+<?php
+if (isset($_POST['deconnexionBtn'])) {
+    deconnexion();
+}
+?>

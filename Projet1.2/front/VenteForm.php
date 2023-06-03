@@ -4,9 +4,9 @@
 ///**********NE PAS MODIFIER***************///
 //////////////////////////////////////////////
 
-
 session_start();
 include "../Controller.php";
+echo $_SESSION["user"];
 
 ?>
 
@@ -29,7 +29,6 @@ function SellForm()
         $nomObj = $_POST['objName'];
         $descriptionObj = $_POST['description'];
         $prixObj = $_POST['prix'];
-        // $enchereObj = $_POST['enchereouuuu'];
         $photoObj = $_FILES['photo']['tmp_name'];
         $videoObj = !empty($_FILES['video']['tmp_name']) ? $_FILES['video']['tmp_name'] : NULL;
         $categObj = $_POST['categ'];
@@ -46,8 +45,15 @@ function SellForm()
             move_uploaded_file($videoObj, $videoDestination);
         }
 
-        $prepare = Connection::$db->prepare("INSERT INTO item(nom ,photos, descriptions, video, prix, id_categorie)VALUES (?, ?, ?, ?, ?, ?)");
-        $prepare->execute(array($nomObj, $destination, $descriptionObj, $videoDestination, $prixObj, $categObj));
+        if (!isset($enchereObj)){
+            $enchereObj = "non";
+        }
+        else{
+            $enchereObj = $_POST['enchereouuuu'];
+        }
+
+        $prepare = Connection::$db->prepare("INSERT INTO item(nom ,photos, descriptions, video, prix, id_categorie, vendeur, enchere)VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $prepare->execute(array($nomObj, $destination, $descriptionObj, $videoDestination, $prixObj, $categObj, $_SESSION["user"], $enchereObj));
 
     }
 
@@ -83,7 +89,7 @@ function SellForm()
                     <textarea cols="20" name="description" rows="10" class="input" required></textarea>
                     <br><br>
                     <label class="radio-button">
-                        <input value="Enchere" name="enchereouuuu" type="radio">
+                        <input value="oui" name="enchereouuuu" type="radio">
                         <span class="radio"></span>
                         Enchère
                     </label>
@@ -118,6 +124,7 @@ function SellForm()
     </div>
     <?php
     SellForm();
+    echo '<script>window.location.href = "../index.php";</script>';
     ?>
 </body>
 
