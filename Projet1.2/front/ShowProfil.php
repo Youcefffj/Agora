@@ -1,10 +1,14 @@
 <?php
 
+//////////////////////////////////////////////
+///*******NE PAS MODIFIER SAUF CSS*********///
+//////////////////////////////////////////////
+
 session_start();
 include "../Connection.php";
 include "../Controller.php";
 
-echo $_SESSION['user'] ;
+// echo $_SESSION['user'] ;
 $profil = $_SESSION['user'];
 $profileData = ShowProfile();
 $show = $profileData['show'];
@@ -17,22 +21,22 @@ function ShowProfile(){
     $prepare = Connection::$db->prepare("SELECT * FROM user WHERE id_user = ?");
     $prepare->execute(array($_SESSION['user']));
     $show = $prepare->fetch();
-    echo $show['pseudo'];
-    echo $show['email'];
-    echo $show['nom'];
-    echo $show['prenom'];
-    //echo $show['image'];
+    // echo $show['pseudo'];
+    // echo $show['email'];
+    // echo $show['nom'];
+    // echo $show['prenom'];
+    // //echo $show['image'];
 
     $prepare = Connection::$db->prepare("SELECT * FROM adresse WHERE id_adr = ?");
     $prepare->execute(array($show['id_adr']));
     $showadr = $prepare->fetch();
 
-    echo $showadr['adresse_ligne1'];
-    echo $showadr['adresse_ligne2'];
-    echo $showadr['ville'];
-    echo $showadr['code_postal'];
-    echo $showadr['pays'];
-    echo $show['photo'];
+    // echo $showadr['adresse_ligne1'];
+    // echo $showadr['adresse_ligne2'];
+    // echo $showadr['ville'];
+    // echo $showadr['code_postal'];
+    // echo $showadr['pays'];
+    // echo $show['photo'];
 
     $profileData = array(
         'show' => $show,
@@ -78,13 +82,13 @@ function ShowProfile(){
                         </div>
                         <div class="infoProfil">
                             <div class="NPetc">
-                                Pseudo
+                                Pseudo: <?=$show['pseudo']?>
                                 <br>
-                                Nom:
+                                Nom: <?=$show['nom']?>
                                 <br>
-                                Prenom:
+                                Prenom: <?=$show['prenom']?>
                                 <br>
-                                Email:
+                                Email: <?=$show['email']?>
                             </div>
                         </div>
                     </div>
@@ -94,18 +98,16 @@ function ShowProfile(){
                     <div class="containerProfil">
                         <div class="infoProfil">
 
-                            adresse 1:
+                            adresse 1: <?=$showadr['adresse_ligne1']?>
                             <br>
-                            adresse 2:
+                            adresse 2: <?=$showadr['adresse_ligne1']?>
+                            <br>
+                            Ville : <?=$showadr['ville']?>
+                            <br>
+                            Code postale : <?=$showadr['code_postal']?>
+                            <br>
+                            Pays : <?=$showadr['pays']?>
 
-                        </div>
-                    </div>
-
-                </div>
-                <div class="parent">
-                    <div class="containerProfil">
-                        <div class="infoProfil">
-                            Ville, Code postale, Pays
                         </div>
                     </div>
                 </div>
