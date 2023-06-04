@@ -1,9 +1,18 @@
+
+<?php
+include "../Connection.php";
+
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
         <title>Agora Francia - Site de e-commerce</title>
         <link rel="stylesheet" type="text/css" href="style.css">
         <link rel="Website icon" type="png" href="images/logo.png">
+        <script src="script.js"></script>
 
     </head>
     <body>
@@ -13,9 +22,9 @@
                     <li><a style="color:black;text-decoration:none" href="../index.php">Accueil</a></li>
                     <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
                     <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="Panier.php">Panier</a></li>
-                    <li><a style="color:black;text-decoration:none" href="formlulairemodif.php">Votre Compte</a></li>
-                    <li><a style="color:black;text-decoration:none" href="ShowProfil.php">Personnel</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="Panier.php">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" class="PasCompte" href="formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="ShowProfil.php">Personnel</a></li>
                 </ul>
             </nav>
             <header>
@@ -73,3 +82,32 @@
         </div>
     </body>
 </html>
+
+<script>
+window.onload = function() {
+  var liens = document.getElementsByClassName("perso");
+
+  // Vérifiez ici votre condition pour rendre les liens non cliquables
+  var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+  if (!isUserLoggedIn) {
+    for (var i = 0; i < liens.length; i++) {
+      var lien = liens[i];
+      lien.removeAttribute("href");
+      lien.style.pointerEvents = "none";
+      lien.style.color = "gray";
+    }
+  }
+  var liens = document.getElementsByClassName("PasCompte");
+
+  // Vérifiez ici votre condition pour rendre les liens non cliquables
+  var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+  if (isUserLoggedIn) {
+    for (var i = 0; i < liens.length; i++) {
+      var lien = liens[i];
+      lien.removeAttribute("href");
+      lien.style.pointerEvents = "none";
+      lien.style.color = "gray";
+    }
+  }
+}
+</script>

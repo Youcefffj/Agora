@@ -13,7 +13,7 @@ include "Basketfct.php";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   // donnees formulaire
+    // donnees formulaire
     $paymode = $_POST['paymode'];
     $numCB = $_POST['numCB'];
     $nomCarte = $_POST['nomCarte'];
@@ -33,14 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       AND moy_paiement.date_exp = :date_exp
       AND moy_paiement.securite = :securite");
 
-$prepare->execute(array(
-    'user_id' => $_SESSION['user'],
-    'num_carte' => $numCB,
-    'type_carte' => $paymode,
-    'nom_carte' => $nomCarte,
-    'date_exp' => $DateExp,
-    'securite' => $Crypto
-));
+    $prepare->execute(array(
+        'user_id' => $_SESSION['user'],
+        'num_carte' => $numCB,
+        'type_carte' => $paymode,
+        'nom_carte' => $nomCarte,
+        'date_exp' => $DateExp,
+        'securite' => $Crypto
+    ));
 
     // SI LIGNE EXACTE TROUVEE, ALORS PAIEMENT EFFECTUE
     if ($prepare->rowCount() > 0) {
@@ -66,6 +66,7 @@ $prepare->execute(array(
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="script.js"></script>
     </head>
     <body>
         <div class="wrapper">
@@ -74,8 +75,9 @@ $prepare->execute(array(
                     <li><a style="color:black;text-decoration:none" href="../index.php">Accueil</a></li>
                     <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
                     <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="panier.php">Panier</a></li>
-                    <li><a style="color:black;text-decoration:none" href="formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="Panier.php">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" class="PasCompte" href="formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="ShowProfil.php">Personnel</a></li>
                 </ul>
             </nav>
             <header>
@@ -86,7 +88,7 @@ $prepare->execute(array(
                 <div class="parent">
                     <div class="form">
                         <form method="POST">
-                            
+
                             <div class="form-dropdown">
                                 <label for="paymode">Mode de paiement:</label>
                                 <select id="paymode" name="paymode">
@@ -124,3 +126,33 @@ $prepare->execute(array(
         </div>
     </body>
 </html>
+
+<script>
+    window.onload = function() {
+        var liens = document.getElementsByClassName("perso");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (!isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+        var liens = document.getElementsByClassName("PasCompte");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+    }
+</script>
+

@@ -17,6 +17,7 @@ include "Basketfct.php";
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="script.js"></script>
     </head>
 
     <body>
@@ -32,9 +33,9 @@ include "Basketfct.php";
                         <li><a style="color:black;text-decoration:none" href="../index.php">Accueil</a></li>
                         <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
                         <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
-                        <li><a style="color:black;text-decoration:none" href="Panier.php">Panier</a></li>
-                        <li><a style="color:black;text-decoration:none" href="formlulairemodif.php">Votre Compte</a></li>
-                        <li><a style="color:black;text-decoration:none" href="ShowProfil.php">Personnel</a></li>
+                        <li><a style="color:black;text-decoration:none" class="perso" href="Panier.php">Panier</a></li>
+                        <li><a style="color:black;text-decoration:none" class="PasCompte" href="formlulairemodif.php">Votre Compte</a></li>
+                        <li><a style="color:black;text-decoration:none" class="perso" href="ShowProfil.php">Personnel</a></li>
                     </ul>
                 </nav>
 
@@ -173,7 +174,7 @@ include "Basketfct.php";
                         $prepare = Connection::$db->prepare("SELECT * FROM item WHERE id_item = ?");
                         $prepare->execute(array($id));
                         $result = $prepare->fetch();
-
+                        $enchere=$result["enchere"];
                         // echo $result['prix'];
                         // echo $result['nom'];
                     ?>
@@ -191,13 +192,16 @@ include "Basketfct.php";
                             <div class="col-lg-4 trucs">
                                 <div class="Tools">
                                     <p>Prix : <?= $result['prix']; ?> €</p>
+                                    <!-- <p>Prix : <?= $result['prix_enchere']; ?> €</p> -->
                                     <br>
+                                    
                                     <div class="tab">
-                                        <button class="send" onclick="openTab(event, 'acheter')"> Acheter </button>
-                                        <button class="send" onclick="openTab(event, 'negocier')"> Négocier </button>
-                                        <button class="send" onclick="openTab(event, 'encherir')"> Enchérir </button>
+                                        <button class="send" onclick="openTab(event, 'acheter')" <?php if ($enchere == "oui") { echo "disabled"; } ?>>Acheter</button>
+                                        <button class="send" onclick="openTab(event, 'negocier')" <?php if ($enchere == "oui") { echo "disabled"; } ?>>Négocier</button>
+                                        <button class="send" onclick="openTab(event, 'encherir')" <?php if ($enchere == "non") { echo "disabled"; } ?>>Enchérir</button>
                                         <br>
                                     </div>
+                                    <br>
                                     <div id="acheter" class="tabcontent" style="display: none">
                                         <p>Ajouter au panier</p>
                                         <form name="form" method="post">
@@ -211,7 +215,7 @@ include "Basketfct.php";
                                     <div id="negocier" class="tabcontent" style="display: none">
                                         <form name="form" method="post">
                                             <p>Proposer un nouveau prix :</p>
-                                            <input type="number" name="new_price" style="width:100px;text-align:center;height:50px" min="1">
+                                            <input type="number" name="negooo" style="width:100px;text-align:center;height:50px" min="1">
                                             <input type="submit" class="send" value="valider">
                                         </form>
                                     </div>
@@ -219,7 +223,7 @@ include "Basketfct.php";
                                     <div id="encherir" class="tabcontent" style="display: none">
                                         <form name="form" method="post">
                                             <p>Enchérir : </p>
-                                            <input type="number" name="auction" value=<?= $result['prix'] + 1; ?> style="width:100px;text-align:center;height:50px" min=<?= $result['prix'] + 1; ?>>
+                                            <input type="number" name="auction" value=<?= $result['prix_enchere'] + 1; ?> style="width:100px;text-align:center;height:50px" min=<?= $result['prix_enchere'] + 1; ?>>
                                             <input type="submit" class="send" value="valider">
                                         </form>
                                     </div>
@@ -273,53 +277,7 @@ include "Basketfct.php";
         document.getElementById(actionType).style.display = "block";
         evt.currentTarget.className += " active";
     }
-</script>
 
-<?php
-
-if (isset($_POST['auction'])) {
-    encherir();
-}
-
-if(isset($_POST["quantite"])){
-    $quantite = $_POST["quantite"];
-    addToBasket($id, $quantite);
-    echo "ISSET QUANTITE";
-}
-
-function encherir()
-{
-    $enchere = $_POST['auction'];
-    $user = $_SESSION["user"];
-    global $id;
-    global $result;
-
-    if ($enchere > $result['prix']) {
-        // CHERCHE LE MEILLEUR ENRICHISSEUR
-        $prepare = Connection::$db->prepare("SELECT MAX(prix) FROM offre WHERE id_item = ?");
-        $prepare->execute(array($id));
-        $resultMaxPrice = $prepare->fetch();
-        $resultMaxPrice = $resultMaxPrice[0];
-
-        // SI MEILLEUR ENRICHISSEUR
-        if ($enchere > $resultMaxPrice) {
-            $newPrice = $resultMaxPrice + 1;
-            echo "MEILLEUR ENRICHISSEUR";
-        } else {
-            $newPrice = $enchere + 1;
-            echo "PAS LE MEILLEUR ENRICHISSEUR";
-        }
-        // AJOUTE L'ENCHERE DANS LA BDD
-        $prepare = Connection::$db->prepare("INSERT INTO offre(id_item ,id_user, prix) VALUES (?, ?, ?)");
-        $prepare->execute(array($id, $user, $enchere));
-        // MODIFIE LE PRIX DE L'ITEM DANS LA BDD
-        $prepare = Connection::$db->prepare("UPDATE item SET prix = ? WHERE id_item = ?");
-        $prepare->execute(array($newPrice, $id));
-    }
-}
-
-?>
-<script>
     function desactiverBouton() {
         var inputValeur = document.getElementById("inputId").value; // Récupérer la valeur du champ de saisie
         var bouton = document.getElementById("boutonId"); // Récupérer le bouton par son ID
@@ -330,4 +288,88 @@ function encherir()
             bouton.disabled = false; // Activer le bouton
         }
     }
+
+    window.onload = function() {
+        var liens = document.getElementsByClassName("perso");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (!isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+        var liens = document.getElementsByClassName("PasCompte");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+    }
+
+
 </script>
+
+<?php
+    $prepare = Connection::$db->prepare("SELECT COUNT(*) FROM offre WHERE id_item = ?");
+    $prepare->execute(array($id));
+    $nbEnchere = $prepare->fetch();
+    $nbEnchere = $nbEnchere[0];
+
+    if (isset($_POST['auction'])) {
+        encherir();
+    }
+
+    if(isset($_POST["quantite"])){
+        $quantite = $_POST["quantite"];
+        addToBasket($id, $quantite);
+        echo "ISSET QUANTITE";
+    }
+
+    if(isset($_POST["negooo"])){
+        $prixprop=$_POST["negooo"];
+        negociation($id, $prixprop);
+    }
+
+    function encherir()
+    {
+        $enchere = $_POST['auction'];
+        $user = $_SESSION["user"];
+        global $id;
+        global $result;
+
+        if ($enchere > $result['prix_enchere']) {
+            // CHERCHE LE MEILLEUR ENRICHISSEUR
+            $prepare = Connection::$db->prepare("SELECT MAX(prix) FROM offre WHERE id_item = ?");
+            $prepare->execute(array($id));
+            $resultMaxPrice = $prepare->fetch();
+            $resultMaxPrice = $resultMaxPrice[0];
+            var_dump($resultMaxPrice);
+
+            // SI MEILLEUR ENRICHISSEUR
+            if ($enchere > $resultMaxPrice) {
+                $newPrice = $resultMaxPrice + 1;
+                echo "MEILLEUR ENRICHISSEUR";
+            } else {
+                $newPrice = $enchere + 1;
+                echo "PAS LE MEILLEUR ENRICHISSEUR";
+            }
+            // AJOUTE L'ENCHERE DANS LA BDD
+            $prepare = Connection::$db->prepare("INSERT INTO offre(id_item ,id_user, prix) VALUES (?, ?, ?)");
+            $prepare->execute(array($id, $user, $enchere));
+            // MODIFIE LE PRIX DE L'ITEM DANS LA BDD
+            $prepare = Connection::$db->prepare("UPDATE item SET prix_enchere = ? WHERE id_item = ?");
+            $prepare->execute(array($newPrice, $id));
+        }
+    }
+
+?>

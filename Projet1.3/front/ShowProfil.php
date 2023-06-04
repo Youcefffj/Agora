@@ -9,6 +9,7 @@ include "../Connection.php";
 include "../Controller.php";
 include "deco.php";
 
+
 // echo $_SESSION['user'] ;
 $profil = $_SESSION['user'];
 $profileData = ShowProfile();
@@ -60,6 +61,7 @@ function ShowProfile()
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="script.js"></script>
     </head>
 
     <body>
@@ -69,9 +71,9 @@ function ShowProfile()
                     <li><a style="color:black;text-decoration:none" href="../index.php">Accueil</a></li>
                     <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
                     <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="Panier.php">Panier</a></li>
-                    <li><a style="color:black;text-decoration:none" href="formlulairemodif.php">Votre Compte</a></li>
-                    <li><a style="color:black;text-decoration:none" href="ShowProfil.php">Personnel</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="Panier.php">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" class="PasCompte" href="formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="ShowProfil.php">Personnel</a></li>
                 </ul>
             </nav>
             <header>
@@ -126,7 +128,7 @@ function ShowProfile()
                 </div>
                 <div class="parent">
                     <a href="VenteForm.php">
-                        <input type="button" class="send" value="Vendre">
+                        <input type="button" id="Vendre" class="send" value="Vendre">
                     </a>
                 </div>
                 <br>
@@ -143,10 +145,52 @@ function ShowProfile()
     </body>
 
 </html>
+<script>
+    window.onload = function() {
+        var liens = document.getElementsByClassName("perso");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (!isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+        var liens = document.getElementsByClassName("PasCompte");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+    }
+
+        <?php
+    // Récupérer la valeur de $show['status'] depuis la base de données
+    $status = $show['status'];
+        ?>
+
+    // Vérifier si la valeur est égale à "vendeur"
+    if ("<?php echo $status; ?>" === "vendeur") {
+        // Désactiver le bouton
+        document.getElementById("Vendre").disabled = false;
+    } else {
+        document.getElementById("Vendre").disabled = true;
+    }
+</script>
+
 
 
 <?php
-    if (isset($_POST['deconnexionBtn'])) {
-        deconnexion();
-    }
+if (isset($_POST['deconnexionBtn'])) {
+    deconnexion();
+}
 ?>

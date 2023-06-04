@@ -33,9 +33,10 @@ session_start();
                     <li><a style="color:black;text-decoration:none" href="index.php">Accueil</a></li>
                     <li><a style="color:black;text-decoration:none" href="front/produits.php">Tout parcourir</a></li>
                     <li><a style="color:black;text-decoration:none" href="front/notifications.php">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="front/Panier.php">Panier</a></li>
-                    <li><a style="color:black;text-decoration:none" href="front/formlulairemodif.php">Votre Compte</a></li>
-                    <li><a style="color:black;text-decoration:none" href="front/ShowProfil.php">Personnel</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" id="panier" href="front/Panier.php">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" class="PasCompte" href="front/formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="front/ShowProfil.php">Personnel</a>
+                    </li>
                 </ul>
             </nav>
 
@@ -49,7 +50,7 @@ session_start();
                 <div class ="container">
 
                     <div class="card">
-                        <a href="produits.php">
+                        <a style="color:black;text-decoration:none" href="front/produits.php">
                             <img src="front/images/iphone.jpg" class="image1">
                             <br>
                             <p>Iphone</p>
@@ -57,49 +58,61 @@ session_start();
                     </div>
 
                     <div class="card">
-                        <a href="produits.php">
+                        <a style="color:black;text-decoration:none" href="front/produits.php">
                             <img src="front/images/macbook.jpeg" class="image1">
+                            <br>
                             <p>Macbook</p>
                         </a>
                     </div>
                     <div class="card">
-                        <img src="front/images/Max.jpg" class="image1">
-                        <p>AirPods Max</p>
+                        <a style="color:black;text-decoration:none" href="front/produits.php">
+                            <img src="front/images/Max.jpg" class="image1">
+                            <br>
+                            <p>AirPods Max</p>
+                        </a>
                     </div>
 
                     <div class="card">
-                        <img src="front/images/Ipad.jpg" class="image1">
-                        <p>Ipad</p>
+                        <a style="color:black;text-decoration:none" href="front/produits.php">
+                            <img src="front/images/Ipad.jpg" class="image1">
+                            <br>
+                            <p>Ipad</p>
+                        </a>
                     </div>
 
                     <div class="card">
-                        <img src="front/images/wheel.jpeg" class="image1">
-                        <p>Apple Wheels</p>
+                        <a style="color:black;text-decoration:none" href="front/produits.php">
+                            <img src="front/images/wheel.jpeg" class="image1">
+                            <br>
+                            <p>Apple Wheels</p>
+                        </a>
                     </div>
 
                 </div>
                 <br>
 
                 <div class="carousel">
-                    <div class="slide">
-                        <img src="front/images/wheel.jpeg" alt="Slide 1">
-                    </div>
-                    <div class="slide">
-                        <img src="front/images/iphone.jpg" alt="Slide 2">
-                    </div>
-                    <div class="slide">
-                        <img src="front/images/Ipad.jpg" alt="Slide 3">
-                    </div>
-                    <div class="slide">
-                        <img src="front/images/Max.jpg" alt="Slide 3">
-                    </div>
-                    <div class="slide">
-                        <img src="front/images/logo.png" alt="Slide 3">
-                    </div>
+                    <a href="front/produits.php">
+                        <div class="slide">
+                            <img src="front/images/wheel.jpeg" alt="Slide 1">
+                        </div>
+                        <div class="slide">
+                            <img src="front/images/iphone.jpg" alt="Slide 2">
+                        </div>
+                        <div class="slide">
+                            <img src="front/images/Ipad.jpg" alt="Slide 3">
+                        </div>
+                        <div class="slide">
+                            <img src="front/images/Max.jpg" alt="Slide 3">
+                        </div>
+                        <div class="slide">
+                            <img src="front/images/logo.png" alt="Slide 3">
+                        </div>
+                    </a>
                 </div>
 
                 <br>
-                
+
                 <div class ="container">
                     <p class="description">Bienvenue sur Agora Francia, votre destination ultime pour le shopping en ligne. Découvrez notre vaste sélection de produits de qualité, soigneusement choisis pour répondre à tous vos besoins. Avec des options de paiement sécurisées et une livraison rapide, Agora Francia offre une expérience d'achat en ligne simple et pratique. Faites confiance à notre plateforme pour trouver les dernières tendances, des articles uniques et profiter d'un service client exceptionnel. Explorez dès maintenant Agora Francia et laissez-vous séduire par notre offre diversifiée.</p>
 
@@ -119,3 +132,62 @@ session_start();
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     </body>
 </html>
+
+<script>
+    // Pour ajouter une fonctionnalité de défilement automatique
+    var slides = document.getElementsByClassName('slide');
+    var currentSlide = 0;
+
+    function showSlide(index) {
+        if (index >= slides.length) {
+            currentSlide = 0;
+        } else if (index < 0) {
+            currentSlide = slides.length - 1;
+        }
+
+        for (var i = 0; i < slides.length; i++) {
+            slides[i].classList.remove('active');
+        }
+
+        slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(function() {
+        currentSlide++;
+        showSlide(currentSlide);
+    }, 3000); // Défilement automatique toutes les 3 secondes
+
+
+
+
+
+    window.onload = function() {
+        var liens = document.getElementsByClassName("perso");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (!isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+        var liens = document.getElementsByClassName("PasCompte");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+    }
+</script>
+
+
+

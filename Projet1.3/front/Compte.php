@@ -7,7 +7,7 @@
 session_start();
 
 include "../Controller.php";
-    ?>
+?>
 
 <!DOCTYPE html>
 
@@ -23,6 +23,7 @@ include "../Controller.php";
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
         <!-- Dernier JavaScript compilé -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="script.js"></script>
 
     </head>
 
@@ -30,7 +31,7 @@ include "../Controller.php";
 
 
     function formRegister() {
-    
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérifier si le formulaire a été soumis
 
@@ -54,7 +55,7 @@ include "../Controller.php";
             $CP  =$_POST['CP'];
             $pays  =$_POST['pays'];
             $id_carte = NULL;
-            
+
             $destinationPP='PP/images'.rand(0,10000000).'.jpg';
             move_uploaded_file($photo,$destinationPP);
 
@@ -91,7 +92,7 @@ include "../Controller.php";
 
     }
 
-?>
+    ?>
 
 
     <body>
@@ -101,9 +102,9 @@ include "../Controller.php";
                     <li><a style="color:black;text-decoration:none" href="../index.php">Accueil</a></li>
                     <li><a style="color:black;text-decoration:none" href="produits.php">Tout parcourir</a></li>
                     <li><a style="color:black;text-decoration:none" href="notifications.php">Notifications</a></li>
-                    <li><a style="color:black;text-decoration:none" href="Panier.php">Panier</a></li>
-                    <li><a style="color:black;text-decoration:none" href="formlulairemodif.php">Votre Compte</a></li>
-                    <li><a style="color:black;text-decoration:none" href="ShowProfil.php">Personnel</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="Panier.php">Panier</a></li>
+                    <li><a style="color:black;text-decoration:none" class="PasCompte" href="formlulairemodif.php">Votre Compte</a></li>
+                    <li><a style="color:black;text-decoration:none" class="perso" href="ShowProfil.php">Personnel</a></li>
                 </ul>
             </nav>
 
@@ -151,7 +152,7 @@ include "../Controller.php";
                         <p>Photo de profil</p>
                         <input class="inputphoto" type="file" name="photo" accept="image/*" required>
                         <br><br>
-                        
+
                         <p>J'ai lu et j'accepte les  <a target="_blank" href="condiitions_g%C3%A9n%C3%A9rales_utilisation.html">conditions générales d'utilisation</a> </p>
 
                         <input class="cyberpunk-checkbox" type="checkbox" name="checkbox" required>
@@ -160,7 +161,7 @@ include "../Controller.php";
 
                         <input type ="submit" class="send" placeholder ="Envoyer" name="register-form">
                         <br><br>
-                        
+
                         <p>déjà inscris ? <a href="formlulairemodif.php" >cliquer ici</a></p>
                     </form>
 
@@ -172,9 +173,37 @@ include "../Controller.php";
             </footer>
         </div>
         <?php
-            formRegister();
+        formRegister();
         ?>
     </body>
 </html>
+<script>
+    window.onload = function() {
+        var liens = document.getElementsByClassName("perso");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (!isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+        var liens = document.getElementsByClassName("PasCompte");
+
+        // Vérifiez ici votre condition pour rendre les liens non cliquables
+        var isUserLoggedIn = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        if (isUserLoggedIn) {
+            for (var i = 0; i < liens.length; i++) {
+                var lien = liens[i];
+                lien.removeAttribute("href");
+                lien.style.pointerEvents = "none";
+                lien.style.color = "gray";
+            }
+        }
+    }
+</script>
 
 
